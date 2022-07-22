@@ -1,19 +1,21 @@
 import React from 'react';
+import ThougthList from '../components/ThoughtList';
+import ThoughtForm from '../components/ThoughtForm';
+import FriendList from '../components/FriendList';
+import auth from '../utils/auth';
 import { useQuery } from '@apollo/client';
 import { QUERY_THOUGHTS, QUERY_ME_BASIC } from '../utils/queries';
-import ThougthList from '../components/ThoughtList';
-import auth from '../utils/auth';
-import FriendList from '../components/FriendList';
-import ThoughtForm from '../components/ThoughtForm';
 
 const Home = () => {
   const loggedIn = auth.loggedIn();
+
   //use useQuery hook to make query request
   const { loading, data } = useQuery(QUERY_THOUGHTS);
+
   // use object destructuring to extract `data` from the `useQuery` Hook's response and rename it `userData` to be more descriptive
   const { data: userData } = useQuery(QUERY_ME_BASIC);
   const thoughts = data?.thoughts || [];
-  console.log(thoughts);
+
   return (
     <main>
       <div className='flex-row justify-space-between'>

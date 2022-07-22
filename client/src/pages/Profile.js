@@ -12,29 +12,18 @@ import { QUERY_USER, QUERY_ME } from '../utils/queries';
 import auth from '../utils/auth';
 
 const Profile = (props) => {
-  const [addFriend] = useMutation(ADD_FRIEND);
-
   const { username: userParam } = useParams();
 
+  const [addFriend] = useMutation(ADD_FRIEND);
   const { loading, data } = useQuery(userParam ? QUERY_USER : QUERY_ME, {
-    variables: { username: userParam }
+    variables: { username: userParam },
   });
-
-  const handleClick = async () => {
-    try {
-      await addFriend({
-        variables: { id: user._id }
-      });
-
-    } catch (e) {
-      console.error(e)
-    }
-  }
 
   const user = data?.me || data?.user || {};
 
+  //navigate to personal profile page if username is yours
   if (auth.loggedIn() && auth.getProfile().data.username === userParam) {
-    return <Navigate to='/profile' />;
+    return <Navigate to='/profile/:username' />;
   }
 
   if (loading) {
@@ -48,6 +37,17 @@ const Profile = (props) => {
       </h4>
     );
   }
+
+  const handleClick = async () => {
+    try {
+      await addFriend({
+        variables: { id: user._id },
+      });
+
+    } catch (e) {
+      console.error(e)
+    }
+  };
 
   return (
     <div>
